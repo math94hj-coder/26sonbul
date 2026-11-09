@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>2부 실습 슬라이드 — 광주아이온 디자인</title>
+<!-- 1부(Canva) 슬라이드와 같은 틀: 남색 바탕 · 검색창 모양 제목 막대 · 흰 본문 판 · 오른쪽 아래 쪽 번호
+     build_materials.py 가 {{STICKER}} {{ROBOT}} {{QR_SITE}} {{QR_SMALL}} 을 채우고 PDF로 만든다 -->
+<style>
+    @page { size: 1440px 810px; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+        --navy: #00167a; --ink: #252525; --muted: #4b5563;
+        --pink: #ffd9f1; --red: #ef2b2b; --blue: #2a59e2;
+        --line: #d6dde5; --soft: #f8fafc;
+        --mint: #ecfdf5; --mint-b: #a7e9cc; --green: #059669; --green-d: #047857;
+        --yellow: #fff59a;
+    }
+    body { font-family: 'Pretendard', sans-serif; color: var(--ink); word-break: keep-all; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .slide { width: 1440px; height: 810px; position: relative; overflow: hidden; background: var(--navy); page-break-after: always; }
+    .slide:last-child { page-break-after: auto; }
+    .sticker { position: absolute; left: 0; top: 0; width: 200px; height: 116px; z-index: 3; }
+    .win { position: absolute; top: 18px; right: 20px; display: flex; gap: 22px; align-items: center; }
+    .win .o { width: 20px; height: 20px; border: 2px solid white; border-radius: 50%; }
+    .win .x { width: 20px; height: 20px; position: relative; }
+    .win .x::before, .win .x::after { content: ''; position: absolute; left: 9px; top: -2px; width: 2px; height: 24px; background: white; transform: rotate(45deg); }
+    .win .x::after { transform: rotate(-45deg); }
+    .bar { position: absolute; left: 30px; top: 86px; width: 1384px; height: 74px; background: white; border-radius: 6px; display: flex; align-items: center; padding: 0 30px 0 22px; gap: 26px; }
+    .bar .lens { width: 34px; height: 34px; border: 3px solid var(--ink); border-radius: 50%; position: relative; flex-shrink: 0; margin-top: -4px; }
+    .bar .lens::after { content: ''; position: absolute; right: -10px; bottom: -8px; width: 3px; height: 13px; background: var(--ink); transform: rotate(-45deg); }
+    .bar h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; flex: 1; white-space: nowrap; }
+    .bar .tag { font-size: 17px; font-weight: 700; color: var(--green-d); background: var(--mint); border-radius: 8px; padding: 5px 14px; }
+    .bar .dots { display: flex; flex-direction: column; gap: 8px; }
+    .bar .dots i { width: 8px; height: 8px; border-radius: 50%; background: #9a9a9a; display: block; }
+    .panel { position: absolute; left: 29px; top: 176px; width: 1385px; height: 599px; background: white; padding: 20px 36px 0; overflow: hidden; }
+    .pno { position: absolute; right: 36px; bottom: 30px; font-size: 24px; color: #111; z-index: 2; }
+
+    .pill { display: inline-block; background: var(--pink); border-radius: 18px; padding: 6px 22px; font-size: 38px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; }
+    .lead { font-size: 24px; font-weight: 600; margin-bottom: 16px; }
+    .red { color: var(--red); } .blue { color: var(--blue); } .green { color: var(--green-d); }
+    .sub { font-size: 28px; font-weight: 800; color: var(--blue); margin-bottom: 12px; }
+    .sub::before { content: '◆ '; font-size: 18px; vertical-align: 3px; }
+    .grid { display: grid; gap: 18px; }
+    .card { border: 1.5px solid var(--line); border-radius: 14px; padding: 16px 22px; background: white; }
+    .card.step { padding: 12px 10px; }
+    .card .t { font-size: 25px; font-weight: 800; margin-bottom: 8px; }
+    .card p, .card li { font-size: 20px; line-height: 1.5; color: var(--muted); }
+    .card.mint { background: var(--mint); border-color: var(--mint-b); }
+    .card.mint .t { color: var(--green-d); }
+    .card.pinkc { background: #fff1f8; border-color: #ffc4e5; }
+    .card.blue-c { background: #eef3ff; border-color: #c9d7ff; }
+    .card.blue-c .t { color: var(--blue); }
+    ul.plain { list-style: none; }
+    ul.plain li { position: relative; padding-left: 18px; margin-bottom: 4px; }
+    ul.plain li::before { content: '•'; position: absolute; left: 2px; color: var(--ink); }
+    .row { background: var(--soft); border-left: 5px solid var(--green); padding: 10px 18px; font-size: 21px; line-height: 1.45; margin-bottom: 10px; }
+    .row b { color: var(--ink); }
+    .row span { color: var(--muted); }
+    .hl { background: var(--yellow); font-weight: 700; padding: 10px 18px; border-radius: 6px; font-size: 21px; display: inline-block; }
+    .note { position: absolute; left: 65px; right: 200px; bottom: 50px; font-size: 21px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .note .ok { width: 26px; height: 26px; border-radius: 7px; background: var(--green); color: white; font-size: 17px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num { display: inline-flex; width: 38px; height: 38px; border-radius: 50%; background: var(--navy); color: white; font-weight: 800; font-size: 20px; align-items: center; justify-content: center; }
+    .step { text-align: center; position: relative; }
+    .step .em { font-size: 32px; margin: 2px 0 0; }
+    .step .t { font-size: 25px; font-weight: 800; }
+    .step p { font-size: 18px; color: var(--muted); line-height: 1.4; }
+    .arr { position: absolute; right: -15px; top: 50%; transform: translateY(-50%); color: var(--red); font-weight: 900; font-size: 22px; z-index: 1; }
+    table { width: 100%; border-collapse: collapse; font-size: 21px; }
+    th, td { padding: 6px 16px; text-align: left; border-bottom: 1.5px solid var(--line); }
+    th { background: var(--pink); font-weight: 800; }
+    .qr { background: white; border: 1.5px solid var(--line); border-radius: 14px; padding: 12px; line-height: 0; display: inline-block; }
+    .short { font-weight: 900; font-size: 46px; letter-spacing: -0.02em; }
+    .short span { color: var(--red); }
+    ol.st { padding-left: 30px; font-size: 22px; line-height: 1.5; }
+    ol.st li { margin-bottom: 5px; }
+    ol.st li::marker { color: var(--red); font-weight: 800; }
+</style>
+</head>
+<body>
+
+<!-- 43. 2부 표지 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습 · Gemini로 만드는 수업용 웹페이지</h1><span class="tag">LINKFORGE for Teachers</span><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel" style="display:grid;grid-template-columns:1fr 360px;gap:40px;padding-top:40px">
+        <div>
+            <div class="pill">내 수업을 LINK로</div>
+            <div style="font-size:62px;font-weight:900;line-height:1.25;letter-spacing:-0.03em;margin:4px 0 22px">Gemini로 만드는<br>수업용 웹페이지</div>
+            <p class="lead" style="font-size:28px">코딩 몰라도 OK — 오늘 <span class="red">학생에게 보낼 링크 1개</span>를 만들어 갑니다.</p>
+            <div class="row" style="margin-top:26px"><b>순서</b> <span>아이디어 → 부탁문 → Canvas → 고치기 → 링크·QR 공유</span></div>
+            <div class="row"><b>준비</b> <span>노트북(크롬) · 광주아이온 계정(Gemini Pro) · 휴대폰 · 다음 주 수업 단원 1개</span></div>
+        </div>
+        <div style="text-align:center;padding-top:10px">
+            <div class="qr">{{QR_SITE}}</div>
+            <p style="font-size:20px;font-weight:700;margin-top:12px">📱 실습용 웹페이지</p>
+            <div class="short">부고<span>.짱.com</span></div>
+        </div>
+    </div>
+    <div class="pno">43/51페이지</div>
+</section>
+
+<!-- 44. 오늘 할 일 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습-오늘 할 일</h1><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel">
+        <div class="pill">다섯 단계면 끝</div>
+        <p class="lead">AI에게 부탁 → 미리보기 → <span class="red">말로 고치기</span> → 링크로 공유. 코드는 읽지 않아도 됩니다.</p>
+        <div class="grid" style="grid-template-columns:repeat(5,1fr)">
+            <div class="card step"><span class="num">1</span><div class="em">💡</div><div class="t">아이디어</div><p>어떤 수업에서<br>무엇을?</p><span class="arr">▶</span></div>
+            <div class="card step"><span class="num">2</span><div class="em">🧾</div><div class="t">부탁문</div><p>빈칸 채우면<br>자동 완성</p><span class="arr">▶</span></div>
+            <div class="card step"><span class="num">3</span><div class="em">🎨</div><div class="t">Canvas</div><p>Gemini에 붙여 넣고<br>미리보기</p><span class="arr">▶</span></div>
+            <div class="card step"><span class="num">4</span><div class="em">🔧</div><div class="t">고치기</div><p>말로 2~3번<br>수정 요청</p><span class="arr">▶</span></div>
+            <div class="card step mint"><span class="num">5</span><div class="em">🔗</div><div class="t">공유</div><p>링크·QR로<br>학생에게</p></div>
+        </div>
+        <div class="sub" style="margin-top:14px;margin-bottom:6px">왜 웹페이지일까요?</div>
+        <table>
+            <tr><th style="width:16%"></th><th style="width:38%">종이 학습지</th><th>수업용 웹페이지</th></tr>
+            <tr><td><b>피드백</b></td><td>걷어서 채점 후 다음 시간에</td><td>누르는 <b class="red">즉시</b> 정답·해설</td></tr>
+            <tr><td><b>반복</b></td><td>한 번 풀면 끝</td><td>다시 풀기 · 틀린 문제만 · 순서 무작위</td></tr>
+            <tr><td><b>접근</b></td><td>교실 안에서만</td><td>QR·링크 하나로 수업 중에도, 집에서도</td></tr>
+        </table>
+    </div>
+    <div class="pno">44/51페이지</div>
+</section>
+
+<!-- 45. 아이디어 22가지 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습-무엇을 만들까?</h1><span class="tag">실습 웹페이지 2번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel">
+        <div class="pill">수업용 웹페이지 22가지</div>
+        <p class="lead">분류별로 골라 <span class="red">[이걸로 만들기]</span>를 누르면 기능이 자동으로 채워집니다.</p>
+        <div class="grid" style="grid-template-columns:repeat(5,1fr)">
+            <div class="card"><div class="t">📝 복습·평가</div><ul class="plain"><li>퀴즈 게임</li><li>⚔️ 팀 대전 퀴즈</li><li>OX 스피드 퀴즈</li><li>빈칸 채우기</li><li>짝 맞추기 게임</li><li>오답 클리닉</li></ul></div>
+            <div class="card"><div class="t">💡 개념 이해</div><ul class="plain"><li>개념 카드</li><li>순서 맞추기</li><li>분류하기</li><li>개념 지도</li></ul></div>
+            <div class="card"><div class="t">🔬 탐구·체험</div><ul class="plain"><li>시뮬레이션</li><li>가상 실험실</li><li>데이터 그래프</li><li>클릭 탐험 지도·연표</li></ul></div>
+            <div class="card"><div class="t">🏫 수업 운영</div><ul class="plain"><li>활동 안내판</li><li>발표자·모둠 뽑기</li><li>토론 타이머</li><li>모둠 미션 스테이션</li></ul></div>
+            <div class="card"><div class="t">🪞 성찰·표현</div><ul class="plain"><li>출구티켓</li><li>평가 루브릭</li><li>글감 주사위</li><li>진로·성향 테스트</li></ul></div>
+        </div>
+        <div style="margin-top:22px"><span class="hl">👍 처음이라면 내용이 분명한 퀴즈나 개념 카드부터! 카드를 누르면 예시 화면이 떠요.</span></div>
+    </div>
+    <div class="pno">45/51페이지</div>
+</section>
+
+<!-- 46. 부탁문 만들기 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습-부탁문(프롬프트) 만들기</h1><span class="tag">실습 웹페이지 3번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel">
+        <div class="pill">입력하고, 첨부하고, 설계 맡기기</div>
+        <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="card"><span class="num">1</span><div class="t" style="margin-top:8px">✍️ 수업 정보 입력</div><p>교과·단원·웹페이지 유형·핵심 기능·디자인 + <b>꼭 넣을 학습 내용</b></p></div>
+            <div class="card"><span class="num">2</span><div class="t" style="margin-top:8px">📎 참고 자료 첨부</div><p>PDF · 한글(HWP) · 엑셀 · 워드 · PPT · 이미지<br>글자를 읽어 부탁문에 자동으로 넣어요</p></div>
+            <div class="card mint"><span class="num">3</span><div class="t" style="margin-top:8px">🏗️ 프롬프트 아키텍트</div><p>Gemini가 먼저 '최고의 실행용 프롬프트'를 설계 — 역할·맥락·과업·지침·출력 형식까지</p></div>
+        </div>
+        <div class="sub" style="margin-top:22px">프롬프트 아키텍트 방식 — 두 번 붙여 넣기</div>
+        <div class="grid" style="grid-template-columns:repeat(4,1fr)">
+            <div class="row" style="margin:0"><b>① 부탁문 복사</b></div>
+            <div class="row" style="margin:0"><b>② Gemini 일반 채팅에 붙여 넣기</b></div>
+            <div class="row" style="margin:0"><b>③ [한국어 프롬프트] 복사</b></div>
+            <div class="row" style="margin:0"><b>④ 새 채팅 + <span class="red">Canvas</span>에 붙여 넣기</b></div>
+        </div>
+    </div>
+    <div class="note"><span class="ok">✓</span>한글(HWP)도 OK — 교과서·학습지 내용이 그대로 반영돼요. <span class="red">학생 개인정보 파일은 첨부 금지!</span></div>
+    <div class="pno">46/51페이지</div>
+</section>
+
+<!-- 47. Canvas -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습-Gemini Canvas로 화면 만들기</h1><span class="tag">실습 웹페이지 4번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel">
+        <div class="pill">코드는 읽지 않아도 돼요</div>
+        <div class="grid" style="grid-template-columns:1.1fr 1fr">
+            <div class="card">
+                <div class="t">🎨 만드는 순서</div>
+                <ol class="st">
+                    <li>gemini.google.com 로그인 (광주아이온 계정)</li>
+                    <li>입력창 아래 <b>도구 → Canvas</b> 켜기</li>
+                    <li>3번 탭에서 받은 프롬프트 붙여 넣고 보내기</li>
+                    <li>코드가 다 써지면 <b class="red">미리보기</b> 클릭</li>
+                    <li>학생처럼 <b>직접 눌러 보기</b></li>
+                </ol>
+            </div>
+            <div class="card mint">
+                <div class="t">✅ 미리보기 점검 3가지</div>
+                <div class="row" style="background:white"><b>내용이 맞나요?</b><br><span>정답·용어·해설이 교과서와 같은지 — AI도 틀립니다!</span></div>
+                <div class="row" style="background:white"><b>눌러지나요?</b><br><span>모든 버튼·입력·다시 하기가 동작하는지</span></div>
+                <div class="row" style="background:white;margin:0"><b>휴대폰에서도?</b><br><span>화면을 좁혀도 글씨·버튼이 잘 보이는지</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="note"><span class="ok">✓</span>Canvas 버튼이 안 보이면 부탁문 앞에 "Canvas에서"라고 쓰거나, 옆 선생님과 함께 진행하세요.</div>
+    <div class="pno">47/51페이지</div>
+</section>
+
+<!-- 48. 고치기 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습-말로 고치기</h1><span class="tag">고치기 부탁문 46개</span><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel">
+        <div class="pill">누르면 복사되는 고치기 부탁문</div>
+        <p class="lead">실습 웹페이지 4번 탭에서 분류별로 골라 누르세요. 찾기 칸에 <span class="red">"타이머"</span>처럼 검색해도 돼요.</p>
+        <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+            <div class="card"><div class="t">🎨 디자인 8</div><p>글씨·버튼 크게 · 파스텔 카드형 · 글꼴 바꾸기 · 다크 모드</p></div>
+            <div class="card"><div class="t">📚 내용 8</div><p>문제 늘리기 · 해설 쉽게 · 난이도 3단계 · 힌트 · 내용 점검</p></div>
+            <div class="card"><div class="t">⚙️ 기능 8</div><p>타이머 · 진행도 바 · 다시 하기 · 효과음 · 인쇄용 학습지</p></div>
+            <div class="card"><div class="t">📱 모바일·접근성 5</div><p>휴대폰 잘림 · 터치 쉽게 · 글자 크기 버튼 · 색약 배려</p></div>
+            <div class="card"><div class="t">🏫 수업 운영 7</div><p>학습 목표 화면 · 발표 모드 · 교사용 정답 · 모둠 대항</p></div>
+            <div class="card pinkc"><div class="t">🐞 오류 해결 10</div><p>오류 문구 붙여넣기 · 화면이 하얗게 · 실시간 QR·참여 현황 · 한글 엔터 · 새로고침 이어 하기</p></div>
+        </div>
+    </div>
+    <div class="note"><span class="ok">✓</span>나만의 고치기 공식: <span class="red">[어디를] + [어떻게] + [왜]</span> — 하나 고치고 → 미리보기 확인을 반복하세요.</div>
+    <div class="pno">48/51페이지</div>
+</section>
+
+<!-- 49. 공유 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습-링크·QR로 학생에게 공유하기</h1><span class="tag">실습 웹페이지 5·6번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel">
+        <div class="pill">옆 선생님 휴대폰으로 찍어 보기</div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:26px">
+            <div>
+                <div class="sub">공유 링크 → QR</div>
+                <div class="row"><b>1.</b> Canvas 오른쪽 위 <b>공유 → 링크 복사</b></div>
+                <div class="row"><b>2.</b> 실습 웹페이지 <b>5번 탭</b>에 붙여 넣고 <b>QR 만들기</b></div>
+                <div class="row"><b>3.</b> 수업 화면에 띄우거나 학습지에 인쇄</div>
+                <div class="row"><b>4.</b> <b>6번 탭 작품 갤러리</b>에 올려 서로 구경하기</div>
+            </div>
+            <div>
+                <div class="sub">수업에서 이렇게</div>
+                <table>
+                    <tr><th style="width:30%">언제</th><th>이렇게 써 보세요</th></tr>
+                    <tr><td><b>도입</b></td><td>QR 접속 → 전시 학습 퀴즈 5문항</td></tr>
+                    <tr><td><b>전개</b></td><td>시뮬레이션·개념 카드로 모둠 탐구</td></tr>
+                    <tr><td><b>정리</b></td><td>⚔️ 팀 대전 퀴즈 · 출구 티켓</td></tr>
+                    <tr><td><b>가정</b></td><td>복습 링크를 클래스룸에 게시</td></tr>
+                </table>
+            </div>
+        </div>
+        <div style="margin-top:16px"><span class="hl">🏆 조대부고 예시 퀴즈로 대결해 보기: ⚔️ 팀 대전(교실 TV 한 화면) · 실시간 대결(방 코드 QR로 각자 휴대폰)</span></div>
+    </div>
+    <div class="pno">49/51페이지</div>
+</section>
+
+<!-- 50. 체크리스트 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1>2부 실습-학생에게 주기 전 체크</h1><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel">
+        <div class="pill">공유 전 체크, 그리고 기억할 세 가지</div>
+        <div class="grid" style="grid-template-columns:1fr 1.1fr;gap:26px">
+            <div class="card mint">
+                <div class="t">✅ 공유 전 체크리스트</div>
+                <ul class="plain" style="margin-top:4px">
+                    <li>정답·해설을 <b>교과서와 대조</b>했다</li>
+                    <li>학생 <b>개인정보</b>를 입력받지 않는다</li>
+                    <li>교과서 본문·그림을 통째로 넣지 않았다 (<b>저작권</b>)</li>
+                    <li><b>휴대폰·크롬북</b>에서 직접 열어 보았다</li>
+                    <li>인터넷이 안 될 때의 <b>대안</b>이 있다</li>
+                </ul>
+            </div>
+            <div>
+                <div class="row"><b class="red">1. 내용은 교사가</b> <span>— 학습 내용을 직접 넣고, 정답·해설은 반드시 확인</span></div>
+                <div class="row"><b class="blue">2. 화면은 AI가</b> <span>— 코드는 몰라도 OK, 미리보기 보고 말로 고치기</span></div>
+                <div class="row"><b class="green">3. 작게 시작</b> <span>— 다음 주 도입 퀴즈 5문항부터</span></div>
+                <div style="display:flex;align-items:center;gap:20px;margin-top:14px">
+                    <div class="qr" style="padding:8px">{{QR_SMALL}}</div>
+                    <p style="font-size:27px;font-weight:800;line-height:1.35">오늘 만든 링크 1개가<br><span class="red">다음 주 수업</span>이 됩니다 🌱</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pno">50/51페이지</div>
+</section>
+
+<!-- 51. 감사합니다 -->
+<section class="slide">
+    <div class="win"><div class="o"></div><div class="x"></div></div>
+    <div class="bar"><div class="lens"></div><h1 style="font-weight:600">2026년도 AI 디지털 기반 교육혁신 거점학교_조대부고(11월)</h1><div class="dots"><i></i><i></i><i></i></div></div>
+    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="panel" style="display:flex;align-items:center;justify-content:center;gap:60px">
+        <div style="font-size:80px;font-weight:900;letter-spacing:-0.03em">감사합니다!</div>
+        <img src="{{ROBOT}}" alt="" style="width:200px;height:195px">
+    </div>
+    <div class="pno">51/51페이지</div>
+</section>
+
+</body>
+</html>

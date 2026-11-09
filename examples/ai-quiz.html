@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인공지능 기초 퀴즈 🤖</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="../config.js"></script>
+<style>
+/* 수업용 웹페이지 예시: 혼자 풀기 · 팀 대전(한 화면) · 실시간 대결(각자 휴대폰) */
+:root {
+    --bg: #fbf6ee; --card: #ffffff; --line: #ece1d1;
+    --accent: #d9622b; --accent-d: #b04c1d; --accent-soft: #fbebe0;
+    --mustard: #e3a92f; --mustard-soft: #fbf1d9;
+    --sage: #4f7f5f; --sage-soft: #e8f0e6;
+    --brick: #a8432f; --brick-soft: #f8e6e0;
+    --text: #2f2a25; --muted: #7a6f64;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Pretendard', 'Malgun Gothic', sans-serif; line-height: 1.6; word-break: keep-all; }
+.wrap { max-width: 680px; margin: 0 auto; padding: 1.2rem 1rem 3rem; }
+.wrap.wide { max-width: 980px; }
+header { background: var(--card); border: 1px solid var(--line); border-top: 6px solid var(--accent); border-radius: 22px; padding: 1.3rem 1.3rem 1.1rem; margin-bottom: 1rem; position: relative; overflow: hidden; }
+header::after { content: '🤖'; position: absolute; right: 1rem; bottom: 0.4rem; font-size: 3.4rem; opacity: 0.16; }
+.badge { display: inline-block; background: var(--sage-soft); color: var(--sage); font-weight: 800; font-size: 0.78rem; border-radius: 999px; padding: 0.2rem 0.75rem; }
+h1 { font-size: 1.6rem; margin: 0.5rem 0 0.3rem; }
+h1 span { color: var(--accent); }
+h2 { font-size: 1.2rem; margin: 0 0 0.6rem; }
+.goal { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 1.3rem; margin-bottom: 1rem; }
+.hidden { display: none !important; }
+.muted { color: var(--muted); font-size: 0.9rem; }
+
+.btn { width: 100%; border: none; border-radius: 16px; padding: 0.95rem; font-size: 1.08rem; font-weight: 800; font-family: inherit; cursor: pointer; background: var(--accent); color: white; transition: background 0.15s, transform 0.15s; }
+.btn:hover { background: var(--accent-d); }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn.sub { background: var(--card); color: var(--text); border: 1.5px solid var(--line); }
+.btn.sub:hover { background: var(--accent-soft); }
+.btn.green { background: var(--sage); }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.6rem; }
+.field { display: grid; gap: 0.3rem; margin-bottom: 0.7rem; }
+.field label { font-weight: 800; font-size: 0.92rem; }
+.field input { border: 1.5px solid var(--line); border-radius: 12px; padding: 0.75rem 0.9rem; font-size: 1.05rem; font-family: inherit; background: #fffcf7; }
+.field input:focus { outline: none; border-color: var(--accent); }
+
+/* 모드 선택 */
+.modes { display: grid; gap: 0.7rem; }
+.mode { text-align: left; border: 2px solid var(--line); background: var(--card); border-radius: 18px; padding: 1rem 1.1rem; cursor: pointer; font-family: inherit; color: var(--text); display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.9rem; align-items: center; transition: border-color 0.15s, background 0.15s; }
+.mode:hover { border-color: var(--accent); background: var(--accent-soft); }
+.mode .ico { grid-row: span 2; font-size: 2rem; }
+.mode b { font-size: 1.08rem; }
+.mode small { color: var(--muted); font-size: 0.86rem; }
+
+/* 문제 화면 */
+.top { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 0.5rem; gap: 0.5rem; }
+.top .score { color: var(--sage); }
+.bar { height: 12px; background: var(--line); border-radius: 999px; overflow: hidden; margin-bottom: 1rem; }
+.bar i { display: block; height: 100%; width: 0; background: var(--mustard); border-radius: 999px; transition: width 0.35s; }
+.timer { height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; margin: -0.5rem 0 1rem; }
+.timer i { display: block; height: 100%; width: 100%; background: var(--sage); border-radius: 999px; }
+.qnum { display: inline-block; background: var(--accent-soft); color: var(--accent-d); font-weight: 800; border-radius: 999px; padding: 0.15rem 0.7rem; font-size: 0.85rem; }
+.q { font-size: 1.3rem; font-weight: 800; margin: 0.6rem 0 1rem; }
+.opts { display: grid; gap: 0.6rem; }
+.opt { text-align: left; border: 2px solid var(--line); background: var(--card); border-radius: 16px; padding: 0.95rem 1rem; font-size: 1.08rem; font-weight: 700; font-family: inherit; cursor: pointer; color: var(--text); display: flex; gap: 0.7rem; align-items: center; transition: border-color 0.15s, background 0.15s; }
+.opt:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+.opt .k { flex-shrink: 0; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: var(--bg); display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+.opt.ok { border-color: var(--sage); background: var(--sage-soft); }
+.opt.no { border-color: var(--brick); background: var(--brick-soft); }
+.opt.dim { opacity: 0.45; }
+.opt:disabled { cursor: default; }
+.fb { margin-top: 1rem; border-radius: 16px; padding: 0.9rem 1rem; font-size: 0.98rem; }
+.fb.ok { background: var(--sage-soft); color: #2f5a3d; }
+.fb.no { background: var(--brick-soft); color: #7a2e20; }
+.fb.info { background: var(--mustard-soft); color: #6b4a0e; }
+.fb b { display: block; font-size: 1.05rem; margin-bottom: 0.2rem; }
+#next { margin-top: 1rem; }
+
+/* 팀 대전 점수판 */
+.teams { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+.team { border: 2px solid var(--line); border-radius: 16px; padding: 0.7rem 0.9rem; background: var(--card); text-align: center; transition: all 0.2s; }
+.team b { display: block; font-size: 1rem; }
+.team span { font-size: 2rem; font-weight: 900; line-height: 1.2; }
+.team.turn { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 3px rgba(217, 98, 43, 0.15); }
+.team.turn b::after { content: ' · 차례!'; color: var(--accent); }
+.turn-msg { text-align: center; font-weight: 800; color: var(--accent-d); margin-bottom: 0.6rem; }
+
+/* 실시간 대결 */
+.host { display: grid; grid-template-columns: 300px 1fr; gap: 1rem; align-items: start; }
+.code { font-size: 3.4rem; font-weight: 900; letter-spacing: 0.25rem; color: var(--accent); text-align: center; line-height: 1.1; margin: 0.3rem 0; }
+.qrbox { display: flex; justify-content: center; padding: 0.7rem; background: white; border-radius: 14px; border: 1px solid var(--line); }
+.join-url { word-break: break-all; font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 0.5rem; }
+.rank { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+.rank li { display: grid; grid-template-columns: 2.4rem 1fr auto; gap: 0.6rem; align-items: center; background: var(--bg); border-radius: 14px; padding: 0.6rem 0.8rem; }
+.rank .no { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 900; }
+.rank li:nth-child(1) .no { background: var(--mustard); color: white; }
+.rank li:nth-child(2) .no { background: #b9b0a5; color: white; }
+.rank li:nth-child(3) .no { background: #c98a5a; color: white; }
+.rank .nm { font-weight: 800; }
+.rank .pg { display: block; height: 6px; background: var(--line); border-radius: 99px; margin-top: 0.25rem; overflow: hidden; }
+.rank .pg i { display: block; height: 100%; background: var(--sage); }
+.rank .pt { font-weight: 900; font-size: 1.2rem; color: var(--accent-d); }
+.rank li.me { outline: 2px solid var(--accent); }
+
+/* 결과 */
+.result { text-align: center; }
+.big { font-size: 3.2rem; font-weight: 900; color: var(--accent); line-height: 1.1; margin: 0.4rem 0; }
+.msg { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.4rem; }
+.reflect { text-align: left; margin-top: 1.2rem; background: var(--mustard-soft); border-radius: 16px; padding: 1rem; }
+.reflect label { font-weight: 800; display: block; margin-bottom: 0.4rem; }
+.reflect textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 0.6rem 0.8rem; font-family: inherit; font-size: 1rem; resize: vertical; }
+.src { margin-top: 1.2rem; font-size: 0.8rem; color: var(--muted); text-align: center; }
+.src a { color: var(--sage); }
+.back { background: none; border: none; color: var(--muted); font-family: inherit; font-weight: 700; cursor: pointer; padding: 0; margin-bottom: 0.6rem; }
+.leaf { position: fixed; top: -2rem; font-size: 1.6rem; pointer-events: none; animation: fall linear forwards; z-index: 50; }
+@keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: 0.6; } }
+@media (prefers-reduced-motion: reduce) { .leaf { display: none; } }
+@media (max-width: 760px) { .host { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+    <header>
+        <span class="badge">수업용 웹페이지 예시 · 퀴즈 게임</span>
+        <h1>아주 쉬운 <span>인공지능</span> 기초 퀴즈</h1>
+        <p class="goal">🎯 오늘의 목표: 인공지능의 뜻과 쓰임새를 알고, 생성형 AI를 바르게 쓰는 태도를 기를 수 있다.</p>
+    </header>
+
+    <!-- 모드 선택 -->
+    <section class="card" id="start">
+        <h2>어떻게 풀까요?</h2>
+        <div class="modes">
+            <button class="mode" onclick="startSolo()"><span class="ico">🙋</span><b>혼자 풀기</b><small>10문제 · 바로 정답과 해설 · 틀린 문제만 다시 풀기</small></button>
+            <button class="mode" onclick="show('teamSetup')"><span class="ico">⚔️</span><b>팀 대전 (한 화면)</b><small>교실 TV 하나로 두 팀이 번갈아 도전 · 틀리면 상대 팀이 뺏을 기회!</small></button>
+            <button class="mode" id="liveModeBtn" onclick="show('liveMenu')"><span class="ico">🏆</span><b>실시간 대결 (각자 휴대폰)</b><small>방 코드로 접속 · 같은 문제를 각자 속도로 · 빨리 맞힐수록 높은 점수 · 실시간 순위판</small></button>
+        </div>
+    </section>
+
+    <!-- 팀 대전 설정 -->
+    <section class="card hidden" id="teamSetup">
+        <button class="back" onclick="show('start')">← 처음으로</button>
+        <h2>⚔️ 팀 대전 준비</h2>
+        <div class="row" style="margin:0 0 0.6rem">
+            <div class="field"><label for="teamA">1팀 이름</label><input id="teamA" maxlength="10" value="🤖 로봇팀"></div>
+            <div class="field"><label for="teamB">2팀 이름</label><input id="teamB" maxlength="10" value="💡 전구팀"></div>
+        </div>
+        <p class="muted">규칙: 두 팀이 번갈아 한 문제씩 도전해요. 맞히면 <b>+100점</b>, 틀리면 상대 팀이 <b>한 번 뺏을 기회</b>(+50점)를 얻어요.</p>
+        <button class="btn" onclick="startTeam()">대전 시작 ⚔️</button>
+    </section>
+
+    <!-- 실시간 대결 메뉴 -->
+    <section class="card hidden" id="liveMenu">
+        <button class="back" onclick="show('start')">← 처음으로</button>
+        <h2>🏆 실시간 대결</h2>
+        <p class="muted">진행자(강사)가 방을 만들고 화면에 띄우면, 참가자는 휴대폰으로 QR을 찍어 들어와요.</p>
+        <div class="row">
+            <button class="btn sub" onclick="hostRoom()">📺 방 만들기 (진행자)</button>
+            <button class="btn" onclick="show('liveJoin')">📱 참가하기</button>
+        </div>
+    </section>
+
+    <!-- 실시간 대결: 참가 -->
+    <section class="card hidden" id="liveJoin">
+        <button class="back" onclick="show('liveMenu')">← 뒤로</button>
+        <h2>📱 대결 참가하기</h2>
+        <div class="field"><label for="joinRoom">방 코드 (숫자 4자리)</label><input id="joinRoom" inputmode="numeric" maxlength="6" placeholder="예) 1019"></div>
+        <div class="field"><label for="joinNick">닉네임 <small class="muted">(실명 대신 별명)</small></label><input id="joinNick" maxlength="12" placeholder="예) 과학쌤, 알파고"></div>
+        <button class="btn" onclick="joinRoom()">입장해서 시작하기 🚀</button>
+        <p class="muted" style="margin:0.7rem 0 0">문제마다 15초! 빨리 맞힐수록 점수가 높아요. 순위판에는 닉네임과 점수만 보여요.</p>
+    </section>
+
+    <!-- 실시간 대결: 진행자 화면 -->
+    <section class="card hidden" id="liveHost">
+        <button class="back" onclick="stopHost()">← 나가기</button>
+        <div class="host">
+            <div>
+                <p class="muted" style="margin:0;text-align:center">방 코드</p>
+                <div class="code" id="hostCode">0000</div>
+                <div class="qrbox" id="hostQR"></div>
+                <div class="join-url" id="hostUrl"></div>
+            </div>
+            <div>
+                <h2>📊 실시간 순위 <small class="muted" id="hostCount"></small></h2>
+                <p class="muted" style="margin:-0.3rem 0 0.7rem">QR을 찍고 닉네임을 넣으면 바로 시작! 문제마다 15초, 빨리 맞힐수록 높은 점수예요.</p>
+                <ol class="rank" id="hostRank"><li class="muted" style="display:block">참가자를 기다리는 중… QR을 찍어 들어오세요!</li></ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- 문제 -->
+    <section class="card hidden" id="quiz">
+        <div class="teams hidden" id="teamBoard">
+            <div class="team" id="tA"><b id="tAname"></b><span id="tAscore">0</span></div>
+            <div class="team" id="tB"><b id="tBname"></b><span id="tBscore">0</span></div>
+        </div>
+        <div class="turn-msg hidden" id="turnMsg"></div>
+        <div class="top"><span id="count">1 / 10</span><span class="score" id="score">점수 0</span></div>
+        <div class="bar"><i id="bar"></i></div>
+        <div class="timer hidden" id="timer"><i id="timerBar"></i></div>
+        <span class="qnum" id="qnum">Q1</span>
+        <p class="q" id="q"></p>
+        <div class="opts" id="opts"></div>
+        <div class="fb hidden" id="fb"></div>
+        <button class="btn hidden" id="next" onclick="nextQ()">다음 문제 →</button>
+    </section>
+
+    <!-- 결과 -->
+    <section class="card result hidden" id="result">
+        <div class="msg" id="rmsg"></div>
+        <div class="big" id="rscore"></div>
+        <p class="goal" id="rsub"></p>
+        <ol class="rank hidden" id="myRank" style="text-align:left;margin-top:1rem"></ol>
+        <div class="row" id="resultBtns">
+            <button class="btn sub" onclick="show('start')">처음 화면으로</button>
+            <button class="btn" id="retryWrong" onclick="startSolo(wrongList)">틀린 문제만 다시</button>
+        </div>
+        <div class="reflect">
+            <label for="ref">✍️ 인공지능에 대해 새로 알게 된 것 한 가지</label>
+            <textarea id="ref" rows="2" placeholder="예) AI도 그럴듯한 거짓 답(환각)을 말할 수 있어서 꼭 확인해야 한다는 것"></textarea>
+        </div>
+    </section>
+
+    <p class="src">연수용 인공지능 기초 예시 퀴즈예요.<br>연수용 예시예요. 실시간 대결은 닉네임과 점수만 저장하고, 그 밖의 개인정보는 받지 않아요.</p>
+</div>
+
+<script>
+// 실시간 대결 점수판 주소 (연수 웹페이지의 작품 갤러리와 같은 Apps Script 웹 앱)
+// ✏️ 점수판 주소는 저장소 맨 위 config.js 의 LINKFORGE_API 를 함께 써요.
+//    비워 두면 '실시간 대결'만 꺼지고, 혼자 풀기·팀 대전은 그대로 쓸 수 있어요.
+const MY_API = String(window.LINKFORGE_API || '').trim();
+const IS_ORIGINAL_SITE = location.hostname === 'richee-pc.github.io' && location.pathname.startsWith('/26AI_design/');
+const API = MY_API || (IS_ORIGINAL_SITE ? 'https://script.google.com/macros/s/AKfycbxokum72etBCOe8i1dDm-gwF5sqGV0ju_HOboKZm6lWtUiaEt9znFxXNJ-QU02a3FzB/exec' : '');
+const LIVE_SECONDS = 15;
+
+// ✏️ [사본 만들기] 우리 학교·교과 문제로 바꾸려면 아래 QUESTIONS 만 고치세요.
+// 문제: q 질문, o 보기, a 정답 번호(0부터), e 해설
+const QUESTIONS = [
+    { q: '인공지능(AI)을 가장 잘 설명한 것은?', o: ['사람처럼 배우고 판단하도록 만든 컴퓨터 기술', '전기를 아끼는 기계', '인터넷 검색창', '사람 몸에 넣는 로봇'], a: 0,
+      e: '인공지능은 사람의 학습·추론·판단 같은 능력을 컴퓨터로 흉내 내도록 만든 기술이에요.' },
+    { q: '인공지능(AI)에서 "AI"는 무엇의 줄임말일까요?', o: ['Auto Internet', 'Artificial Intelligence', 'Active Information', 'Apple Inside'], a: 1,
+      e: 'AI는 Artificial(인공의) Intelligence(지능)의 줄임말이에요.' },
+    { q: '많은 데이터에서 스스로 규칙을 찾아 배우는 AI 방법을 무엇이라고 할까요?', o: ['코딩', '머신러닝(기계학습)', '타자 연습', '복사하기'], a: 1,
+      e: '머신러닝(기계학습)은 사람이 규칙을 일일이 알려 주지 않아도 데이터에서 규칙을 찾아 배우는 방법이에요.' },
+    { q: '다음 중 글·그림·음악 등을 새로 만들어 내는 "생성형 AI"는?', o: ['계산기', 'Gemini', '전자레인지', '엑셀 합계 함수'], a: 1,
+      e: 'Gemini, ChatGPT 같은 생성형 AI는 질문에 맞춰 새로운 글·그림·코드를 만들어 내요.' },
+    { q: '생성형 AI에게 원하는 것을 글로 부탁하는 명령문을 무엇이라고 할까요?', o: ['비밀번호', '프롬프트', '바이러스', '배터리'], a: 1,
+      e: '프롬프트는 AI에게 보내는 "부탁 편지"예요. 구체적으로 쓸수록 원하는 결과가 나와요.' },
+    { q: 'AI가 사실이 아닌 내용을 그럴듯하게 지어내는 현상을 무엇이라고 할까요?', o: ['환각(할루시네이션)', '업데이트', '로그인', '새로고침'], a: 0,
+      e: '이런 현상을 환각(할루시네이션)이라고 해요. 그래서 AI 답은 꼭 다른 자료로 확인해야 해요.' },
+    { q: '휴대폰 사진첩이 사람 얼굴을 알아보고 모아 주는 것은 AI의 어떤 능력일까요?', o: ['이미지 인식', '음악 재생', '전화 걸기', '알람 맞추기'], a: 0,
+      e: 'AI가 사진 속 얼굴·물체를 구별하는 능력을 이미지 인식이라고 해요.' },
+    { q: '생성형 AI를 쓸 때 가장 바른 태도는?', o: ['AI 답을 그대로 내 과제로 낸다', '친구의 개인정보를 입력한다', 'AI 답을 확인하고 내 생각을 더한다', 'AI는 절대 틀리지 않는다고 믿는다'], a: 2,
+      e: 'AI 답은 참고 자료일 뿐이에요. 사실을 확인하고, 내 생각을 더하고, AI를 썼다는 것을 밝혀요.' },
+    { q: 'AI에게 입력하면 안 되는 정보는?', o: ['오늘 날씨 질문', '내 주민등록번호·전화번호', '좋아하는 동물', '수학 공식 질문'], a: 1,
+      e: '주민등록번호·전화번호·주소 같은 개인정보는 AI에 입력하지 않아요. 저장되거나 새어 나갈 수 있어요.' },
+    { q: '1997년 체스 세계 챔피언을, 2016년 이세돌 9단을 이긴 AI가 차례로 맞게 짝지어진 것은?', o: ['알파고 - 딥블루', '딥블루 - 알파고', '시리 - 빅스비', '왓슨 - 시리'], a: 1,
+      e: '1997년 IBM의 딥블루가 체스 챔피언 카스파로프를, 2016년 구글 딥마인드의 알파고가 이세돌 9단을 이겼어요.' }
+];
+
+const $ = id => document.getElementById(id);
+const SECTIONS = ['start', 'teamSetup', 'liveMenu', 'liveJoin', 'liveHost', 'quiz', 'result'];
+function show(id) {
+    SECTIONS.forEach(s => $(s).classList.toggle('hidden', s !== id));
+    $('wrap').classList.toggle('wide', id === 'liveHost');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 같은 방 코드면 모두 같은 문제·보기 순서가 나오도록 숫자 씨앗으로 섞는다
+function rng(seed) { let t = seed >>> 0; return () => { t += 0x6D2B79F5; let r = Math.imul(t ^ (t >>> 15), 1 | t); r ^= r + Math.imul(r ^ (r >>> 7), 61 | r); return ((r ^ (r >>> 14)) >>> 0) / 4294967296; }; }
+function shuffle(arr, rand = Math.random) { return arr.map(v => [rand(), v]).sort((a, b) => a[0] - b[0]).map(x => x[1]); }
+function prepare(source, rand) {
+    return shuffle(source, rand).map(item => {
+        const order = shuffle(item.o.map((_, i) => i), rand);
+        return { ...item, o: order.map(i => item.o[i]), a: order.indexOf(item.a), src: item.src || item };
+    });
+}
+
+// ---------- 공통 진행 ----------
+let mode = 'solo', list = [], idx = 0, score = 0, correct = 0, wrongList = [];
+let team = null, live = null, tick = null, qStart = 0;
+
+function begin(m, source, rand) {
+    mode = m; list = prepare(source, rand); idx = 0; score = 0; correct = 0; wrongList = [];
+    $('teamBoard').classList.toggle('hidden', m !== 'team');
+    $('turnMsg').classList.toggle('hidden', m !== 'team');
+    $('timer').classList.toggle('hidden', m !== 'live');
+    $('score').classList.toggle('hidden', m === 'team');
+    show('quiz'); render();
+}
+function render() {
+    const it = list[idx];
+    $('count').textContent = `${idx + 1} / ${list.length}`;
+    $('score').textContent = `점수 ${score}`;
+    $('bar').style.width = `${(idx / list.length) * 100}%`;
+    $('qnum').textContent = `Q${idx + 1}`;
+    $('q').textContent = it.q;
+    $('opts').innerHTML = '';
+    it.o.forEach((t, i) => {
+        const b = document.createElement('button');
+        b.className = 'opt';
+        b.innerHTML = `<span class="k">${'ABCD'[i]}</span><span></span>`;
+        b.lastChild.textContent = t;
+        b.onclick = () => answer(i);
+        $('opts').appendChild(b);
+    });
+    $('fb').classList.add('hidden'); $('next').classList.add('hidden');
+    if (mode === 'team') { team.steal = false; teamTurnUI(); }
+    if (mode === 'live') startTimer();
+}
+function feedback(kind, title, text) {
+    $('fb').className = 'fb ' + kind;
+    $('fb').innerHTML = '<b></b><span></span>';
+    $('fb').firstChild.textContent = title;
+    $('fb').lastChild.textContent = text;
+}
+function lockOptions(pick) {
+    const it = list[idx];
+    [...$('opts').children].forEach((b, j) => { b.disabled = true; if (j === it.a) b.classList.add('ok'); else if (j === pick) b.classList.add('no'); });
+}
+function showNext() {
+    $('next').textContent = idx === list.length - 1 ? '결과 보기 🏁' : '다음 문제 →';
+    $('next').classList.remove('hidden');
+    $('next').focus({ preventScroll: true });
+}
+function answer(i) {
+    if (mode === 'team') return teamAnswer(i);
+    if (mode === 'live') return liveAnswer(i);
+    const it = list[idx], ok = i === it.a;
+    lockOptions(i);
+    if (ok) { score++; correct++; leaves(6); } else wrongList.push(it.src);
+    $('score').textContent = `점수 ${score}`;
+    feedback(ok ? 'ok' : 'no', ok ? '✔ 정답이에요!' : `✖ 아쉬워요. 정답은 ${'ABCD'[it.a]}번!`, it.e);
+    showNext();
+}
+function nextQ() {
+    idx++;
+    if (idx < list.length) { render(); return; }
+    $('bar').style.width = '100%';
+    if (mode === 'team') return teamEnd();
+    if (mode === 'live') return liveEnd();
+    soloEnd();
+}
+
+// ---------- 혼자 풀기 ----------
+function startSolo(source) { begin('solo', source && source.length ? source : QUESTIONS); }
+function soloEnd() {
+    const pct = correct / list.length;
+    $('rmsg').textContent = pct === 1 ? '🏆 만점! AI 박사 인증!' : pct >= 0.7 ? '👏 인공지능을 잘 알고 있어요!' : '🌱 조금만 더 알아볼까요?';
+    $('rscore').textContent = `${correct} / ${list.length}`;
+    $('rsub').textContent = wrongList.length ? `틀린 문제 ${wrongList.length}개를 다시 풀어 보세요.` : '모든 문제를 맞혔어요!';
+    $('retryWrong').classList.remove('hidden');
+    $('retryWrong').disabled = !wrongList.length;
+    $('myRank').classList.add('hidden');
+    show('result');
+    if (pct >= 0.7) leaves(24);
+}
+
+// ---------- 팀 대전 (한 화면) ----------
+function startTeam() {
+    team = { names: [$('teamA').value.trim() || '1팀', $('teamB').value.trim() || '2팀'], scores: [0, 0], turn: 0, steal: false };
+    $('tAname').textContent = team.names[0]; $('tBname').textContent = team.names[1];
+    $('tAscore').textContent = '0'; $('tBscore').textContent = '0';
+    begin('team', QUESTIONS);
+}
+function teamTurnUI() {
+    const who = team.steal ? 1 - team.turn : team.turn;
+    $('tA').classList.toggle('turn', who === 0);
+    $('tB').classList.toggle('turn', who === 1);
+    $('turnMsg').textContent = team.steal ? `🔥 ${team.names[who]} 뺏기 기회! (맞히면 +50)` : `${team.names[who]} 차례예요! (맞히면 +100)`;
+}
+function teamAnswer(i) {
+    const it = list[idx], btn = $('opts').children[i];
+    if (i === it.a) {
+        const who = team.steal ? 1 - team.turn : team.turn;
+        team.scores[who] += team.steal ? 50 : 100;
+        lockOptions(i); leaves(8);
+        feedback('ok', `✔ ${team.names[who]} 정답! +${team.steal ? 50 : 100}`, it.e);
+    } else if (!team.steal) {
+        btn.disabled = true; btn.classList.add('no');
+        team.steal = true; teamTurnUI();
+        feedback('info', `✖ 아쉬워요! ${team.names[1 - team.turn]}에게 뺏을 기회가 넘어가요.`, '남은 보기 중에서 골라 보세요.');
+        return;
+    } else {
+        lockOptions(i);
+        feedback('no', `✖ 두 팀 모두 놓쳤어요. 정답은 ${'ABCD'[it.a]}번!`, it.e);
+    }
+    $('tAscore').textContent = team.scores[0]; $('tBscore').textContent = team.scores[1];
+    $('tA').classList.remove('turn'); $('tB').classList.remove('turn');
+    $('turnMsg').textContent = '';
+    team.turn = 1 - team.turn;
+    showNext();
+}
+function teamEnd() {
+    const [a, b] = team.scores, [na, nb] = team.names;
+    $('rmsg').textContent = a === b ? '🤝 무승부! 두 팀 모두 멋져요' : `🏆 ${a > b ? na : nb} 승리!`;
+    $('rscore').textContent = `${a} : ${b}`;
+    $('rsub').textContent = `${na} ${a}점 · ${nb} ${b}점`;
+    $('retryWrong').classList.add('hidden');
+    $('myRank').classList.add('hidden');
+    show('result'); leaves(30);
+}
+
+// ---------- 실시간 대결 (각자 휴대폰) ----------
+async function api(method, payload, query) {
+    const r = method === 'GET'
+        ? await fetch(`${API}?${query}&t=${Date.now()}`)
+        : await fetch(API, { method: 'POST', body: JSON.stringify(payload) }); // text/plain: 추가 확인 요청(CORS preflight) 없음
+    return r.json();
+}
+function myPid() {
+    try { let p = localStorage.getItem('jqPid'); if (!p) { p = Math.random().toString(36).slice(2, 12); localStorage.setItem('jqPid', p); } return p; }
+    catch (e) { return Math.random().toString(36).slice(2, 12); }
+}
+function joinRoom() {
+    const room = $('joinRoom').value.replace(/\D/g, '');
+    const nick = $('joinNick').value.trim();
+    if (room.length < 4) { alert('방 코드 숫자 4자리를 적어 주세요.'); return; }
+    if (!nick) { alert('닉네임을 적어 주세요.'); return; }
+    live = { room, nick, pid: myPid() };
+    try { localStorage.setItem('jqNick', nick); } catch (e) {}
+    begin('live', QUESTIONS, rng(Number(room)));
+    push(); // begin()이 점수를 0으로 초기화한 뒤 입장 기록을 보낸다
+}
+function push() {
+    if (!live) return;
+    api('POST', { action: 'battle', room: live.room, pid: live.pid, nick: live.nick, score, correct, done: idx }).catch(() => {});
+}
+function startTimer() {
+    clearInterval(tick);
+    qStart = Date.now();
+    $('timerBar').style.width = '100%';
+    tick = setInterval(() => {
+        const left = Math.max(0, LIVE_SECONDS - (Date.now() - qStart) / 1000);
+        $('timerBar').style.width = `${(left / LIVE_SECONDS) * 100}%`;
+        if (left <= 0) { clearInterval(tick); liveAnswer(-1); }
+    }, 100);
+}
+function liveAnswer(i) {
+    clearInterval(tick);
+    const it = list[idx], left = Math.max(0, LIVE_SECONDS - (Date.now() - qStart) / 1000);
+    lockOptions(i);
+    if (i === it.a) {
+        const gain = 100 + Math.round(left * 10);
+        score += gain; correct++; leaves(5);
+        feedback('ok', `✔ 정답! +${gain}점 (빠르게 맞힌 보너스 포함)`, it.e);
+    } else {
+        wrongList.push(it.src);
+        feedback('no', i < 0 ? `⏰ 시간 초과! 정답은 ${'ABCD'[it.a]}번` : `✖ 아쉬워요. 정답은 ${'ABCD'[it.a]}번!`, it.e);
+    }
+    $('score').textContent = `점수 ${score}`;
+    const done = idx + 1;
+    api('POST', { action: 'battle', room: live.room, pid: live.pid, nick: live.nick, score, correct, done }).catch(() => {});
+    showNext();
+}
+async function liveEnd() {
+    $('rmsg').textContent = '🏁 대결 완료!';
+    $('rscore').textContent = `${score}점`;
+    $('rsub').textContent = `${list.length}문제 중 ${correct}개 정답 · 순위를 불러오는 중…`;
+    $('retryWrong').classList.add('hidden');
+    show('result'); leaves(20);
+    try {
+        // 최종 점수를 보내고, 순위판에 제대로 들어갔는지 확인해 다르면 다시 보낸다 (최대 3번)
+        let d = null;
+        for (let tryNo = 0; tryNo < 3; tryNo++) {
+            await api('POST', { action: 'battle', room: live.room, pid: live.pid, nick: live.nick, score, correct, done: list.length }).catch(() => null);
+            d = await api('GET', null, 'room=' + live.room).catch(() => null);
+            const me = d && d.ok && Array.isArray(d.players) ? d.players.find(p => p.pid === 'p' + live.pid) : null;
+            if (me && me.score === score && me.done === list.length) break;
+            await new Promise(r => setTimeout(r, 1500));
+        }
+        if (!d || !d.ok || !Array.isArray(d.players)) throw new Error((d && d.error) || 'board');
+        const rank = d.players.findIndex(p => p.pid === 'p' + live.pid) + 1;
+        $('rsub').textContent = rank
+            ? `${list.length}문제 중 ${correct}개 정답 · 지금 ${d.players.length}명 중 ${rank}등!`
+            : `${list.length}문제 중 ${correct}개 정답 · 순위는 진행자 화면에서 확인해요.`;
+        renderRank($('myRank'), d.players.slice(0, 5), 'p' + live.pid);
+        $('myRank').classList.remove('hidden');
+    } catch (e) { $('rsub').textContent = `${list.length}문제 중 ${correct}개 정답 · 순위는 진행자 화면에서 확인해요.`; }
+}
+function renderRank(el, players, me) {
+    el.innerHTML = '';
+    players.forEach((p, i) => {
+        const li = document.createElement('li');
+        if (p.pid === me) li.className = 'me';
+        li.innerHTML = `<span class="no">${i + 1}</span><span><span class="nm"></span><span class="pg"><i style="width:${Math.min(100, (p.done / QUESTIONS.length) * 100)}%"></i></span></span><span class="pt">${p.score}</span>`;
+        li.querySelector('.nm').textContent = `${p.nick} · ${p.correct}개`;
+        el.appendChild(li);
+    });
+}
+let hostTimer = null;
+function hostRoom() {
+    const room = String(1000 + Math.floor(Math.random() * 9000));
+    const url = new URL(location.href); url.search = '?room=' + room; url.hash = '';
+    $('hostCode').textContent = room;
+    $('hostUrl').textContent = url.href;
+    $('hostQR').innerHTML = '';
+    $('hostCount').textContent = '';
+    $('hostRank').innerHTML = '<li class="muted" style="display:block">참가자를 기다리는 중… QR을 찍어 들어오세요!</li>';
+    if (window.QRCode) new QRCode($('hostQR'), { text: url.href, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
+    show('liveHost');
+    const poll = async () => {
+        try {
+            const d = await api('GET', null, 'room=' + room);
+            if (!d.ok) throw new Error(d.error);
+            $('hostCount').textContent = `참가 ${d.players.length}명`;
+            if (d.players.length) {
+                // 교실 화면에 한눈에 보이도록 상위 10명만, 나머지는 인원수로
+                renderRank($('hostRank'), d.players.slice(0, 10), '');
+                if (d.players.length > 10) $('hostRank').insertAdjacentHTML('beforeend', `<li class="muted" style="display:block;text-align:center">… 외 ${d.players.length - 10}명 도전 중</li>`);
+            }
+        } catch (e) { $('hostCount').textContent = '(연결 확인 중…)'; }
+    };
+    poll(); clearInterval(hostTimer); hostTimer = setInterval(poll, 3000);
+}
+function stopHost() { clearInterval(hostTimer); show('liveMenu'); }
+
+// 점수판(API)이 연결되지 않은 사본에서는 실시간 대결을 끄고 안내만 보여 준다
+if (!API) {
+    const b = $('liveModeBtn');
+    b.disabled = true; b.style.opacity = 0.55; b.style.cursor = 'default';
+    b.querySelector('small').textContent = '점수판(구글 시트) 연결 후 사용할 수 있어요 · 혼자 풀기와 팀 대전은 바로 가능!';
+}
+// QR로 들어오면(?room=1234) 바로 참가 화면, 연수 페이지에서 ?host=1로 열면 바로 진행자 방 만들기
+(function () {
+    const params = new URLSearchParams(location.search);
+    if (!API) return;
+    if (params.get('host') === '1') { hostRoom(); return; }
+    const room = params.get('room');
+    if (room) {
+        $('joinRoom').value = room.replace(/\D/g, '').slice(0, 6);
+        try { $('joinNick').value = localStorage.getItem('jqNick') || ''; } catch (e) {}
+        show('liveJoin');
+    }
+})();
+
+// 정답·좋은 결과일 때 로봇·반짝이가 떨어지는 효과
+function leaves(n) {
+    for (let k = 0; k < n; k++) {
+        const s = document.createElement('span');
+        s.className = 'leaf'; s.textContent = ['🤖', '✨', '💡'][k % 3];
+        s.style.left = Math.random() * 100 + 'vw';
+        s.style.animationDuration = 1.8 + Math.random() * 1.6 + 's';
+        s.style.animationDelay = Math.random() * 0.4 + 's';
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 4200);
+    }
+}
+</script>
+</body>
+</html>
