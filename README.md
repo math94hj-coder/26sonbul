@@ -5,7 +5,7 @@
 - 1차 2026. 10. 13.(화) 15:00 — 생성형AI를 활용한 수업 및 평가 자료 제작
 - 2차 2026. 11. 10.(화) 15:00 — Canva를 활용한 수업 및 평가 자료 제작
 
-- 연수 페이지: https://math94hj-coder.github.io/26sonbul/ (GitHub Pages 켠 뒤)
+- 연수 페이지: http://손불.짱.com → https://math94hj-coder.github.io/26sonbul/ (GitHub Pages 켠 뒤)
 - 예시 퀴즈: `examples/sonbul-quiz.html` (함평손불중학교 학교소개 기반)
 - 예시 퀴즈 2: `examples/ai-quiz.html` (인공지능 기초)
 - 원본: [richee-pc/26AI_design](https://github.com/richee-pc/26AI_design) · 조대부고 버전 [math94hj-coder/26bugo](https://github.com/math94hj-coder/26bugo)

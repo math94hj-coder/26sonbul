@@ -290,10 +290,8 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
 .hero-body { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
 .hero:has(.hero-join)::after { display: none; }
 .hero-join { position: relative; z-index: 1; background: var(--bg); border: 1px solid var(--line); border-radius: 18px; padding: 0.9rem; width: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
-.short-url { font-weight: 900; font-size: 1.05rem; letter-spacing: -0.01em; line-height: 1.2; color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+.short-url { font-weight: 900; font-size: 1.35rem; letter-spacing: -0.01em; line-height: 1.2; color: var(--ink); text-decoration: none; }
 .short-url span { color: var(--accent); }
-.hero-join .short-url { font-size: 0.95rem; overflow-wrap: normal; }
-.hero-join .short-url span { display: block; font-size: 1.3rem; }
 .short-url:hover { text-decoration: underline; }
 .join-full .short-url { font-size: clamp(1.8rem, min(5vw, 7vh), 3.6rem); }
 .join-full:has(.short-url) .join-full-qr img, .join-full:has(.short-url) .join-full-qr canvas { width: min(40vh, 80vw) !important; }
@@ -432,10 +430,10 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
         </div>
         </div>
         <aside class="hero-join" aria-label="연수 페이지 입장 QR">
-            <a class="short-url" href="https://math94hj-coder.github.io/26sonbul/" target="_blank" rel="noopener" aria-label="연수 페이지 주소 math94hj-coder.github.io/26sonbul">math94hj-coder.github.io<span>/26sonbul</span></a>
+            <a class="short-url" href="http://손불.짱.com" target="_blank" rel="noopener" aria-label="짧은 주소 손불.짱.com">손불<span>.짱.com</span></a>
             <div class="join-qr" id="heroQR"></div>
             <b>📱 휴대폰으로 들어오기</b>
-            <a class="join-url" id="heroUrl" href="https://math94hj-coder.github.io/26sonbul/" hidden></a><!-- 위 주소만 보여 준다 -->
+            <a class="join-url" id="heroUrl" href="http://손불.짱.com" hidden></a><!-- 짧은 주소(손불.짱.com)만 보여 준다 -->
             <div class="join-btns">
                 <button type="button" class="btn btn-main" onclick="openJoin()">📺 크게 띄우기</button>
             </div>
@@ -813,7 +811,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
                 <li>저장소의 <b>Settings → Pages</b> → Branch를 <code>main</code>, 폴더 <code>/ (root)</code>로 두고 <b>Save</b></li>
                 <li>1~2분 뒤 <code>https://아이디.github.io/저장소이름/</code> 주소 완성! → 5번 탭에서 QR 만들기</li>
             </ol>
-            <div class="tip" style="margin-bottom:0">💡 이 연수 웹페이지도 이 방법으로 공개했어요 → <a href="https://math94hj-coder.github.io/26sonbul/" target="_blank" rel="noopener">math94hj-coder.github.io/26sonbul</a>. 단원별 페이지를 더 올리려면 <code>quiz1.html</code>처럼 이름을 바꿔 올리고 주소 끝에 파일 이름을 붙이면 됩니다.</div>
+            <div class="tip" style="margin-bottom:0">💡 이 연수 웹페이지도 이 방법으로 공개했어요 → <a href="http://손불.짱.com" target="_blank" rel="noopener">손불.짱.com</a>. 단원별 페이지를 더 올리려면 <code>quiz1.html</code>처럼 이름을 바꿔 올리고 주소 끝에 파일 이름을 붙이면 됩니다.</div>
         </div>
         <div class="section-head"><span></span>방법 2. GitHub + Streamlit — 파이썬 앱으로 배포하고 싶을 때</div>
         <div class="grid g2">
@@ -938,7 +936,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
     <button type="button" class="pv-close" onclick="closeJoin()" aria-label="닫기">✕</button>
     <p class="join-full-logo">LINKFORGE <small>for Teachers</small></p>
     <h2>휴대폰 카메라로 QR을 찍어 들어오세요 📱</h2>
-    <a class="short-url" href="https://math94hj-coder.github.io/26sonbul/" target="_blank" rel="noopener" aria-label="연수 페이지 주소 math94hj-coder.github.io/26sonbul">math94hj-coder.github.io<span>/26sonbul</span></a>
+    <a class="short-url" href="http://손불.짱.com" target="_blank" rel="noopener" aria-label="짧은 주소 손불.짱.com">손불<span>.짱.com</span></a>
     <div class="join-full-qr" id="joinFullQR"></div>
     <p class="join-full-url" id="joinFullUrl" hidden></p>
     <p class="muted-sm">Gemini로 수업용 웹페이지 만들기 · 찾아가는 학교컨설팅 교사연수 (함평손불중)</p>
@@ -1900,7 +1898,7 @@ loadGallery();
 const SITE_URL = IS_ORIGINAL_SITE ? 'https://richee-pc.github.io/26AI_design/' : new URL('../', location.href).href;
 (function () {
     const shown = SITE_URL.replace(/^https?:\/\//, '').replace(/\/$/, '');
-    // 화면에는 위 연수 페이지 주소만 보여 준다
+    // 화면에는 GitHub 주소 대신 짧은 주소(손불.짱.com)만 보여 준다
 })();
 (function () {
     if (!window.QRCode) return;
