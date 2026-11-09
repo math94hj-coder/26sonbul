@@ -2,14 +2,14 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>2부 실습 슬라이드 — 광주아이온 디자인</title>
-<!-- 1부(Canva) 슬라이드와 같은 틀: 남색 바탕 · 검색창 모양 제목 막대 · 흰 본문 판 · 오른쪽 아래 쪽 번호
-     build_materials.py 가 {{STICKER}} {{ROBOT}} {{QR_SITE}} {{QR_SMALL}} 을 채우고 PDF로 만든다 -->
+<title>생성형AI를 활용한 웹페이지 만들기 — 함평손불중</title>
+<!-- 강의자료 3 · 강의자료 2(교과별 AI 수업 실천 과정)와 같은 파란 틀: 파란 바탕 · 흰 제목 막대 · 흰 본문 판 · 오른쪽 아래 쪽 번호
+     build_materials.py 가 {{QR_SITE}} {{QR_SMALL}} 을 채우고 PDF로 만든다 -->
 <style>
     @page { size: 1440px 810px; margin: 0; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-        --navy: #00167a; --ink: #252525; --muted: #4b5563;
+        --navy: #3f53d9; --ink: #252525; --muted: #4b5563;
         --pink: #ffd9f1; --red: #ef2b2b; --blue: #2a59e2;
         --line: #d6dde5; --soft: #f8fafc;
         --mint: #ecfdf5; --mint-b: #a7e9cc; --green: #059669; --green-d: #047857;
@@ -24,15 +24,15 @@
     .win .x { width: 20px; height: 20px; position: relative; }
     .win .x::before, .win .x::after { content: ''; position: absolute; left: 9px; top: -2px; width: 2px; height: 24px; background: white; transform: rotate(45deg); }
     .win .x::after { transform: rotate(-45deg); }
-    .bar { position: absolute; left: 30px; top: 86px; width: 1384px; height: 74px; background: white; border-radius: 6px; display: flex; align-items: center; padding: 0 30px 0 22px; gap: 26px; }
+    .bar { position: absolute; left: 30px; top: 30px; width: 1384px; height: 84px; background: white; border-radius: 6px; display: flex; align-items: center; padding: 0 30px 0 22px; gap: 26px; }
     .bar .lens { width: 34px; height: 34px; border: 3px solid var(--ink); border-radius: 50%; position: relative; flex-shrink: 0; margin-top: -4px; }
     .bar .lens::after { content: ''; position: absolute; right: -10px; bottom: -8px; width: 3px; height: 13px; background: var(--ink); transform: rotate(-45deg); }
     .bar h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; flex: 1; white-space: nowrap; }
     .bar .tag { font-size: 17px; font-weight: 700; color: var(--green-d); background: var(--mint); border-radius: 8px; padding: 5px 14px; }
     .bar .dots { display: flex; flex-direction: column; gap: 8px; }
     .bar .dots i { width: 8px; height: 8px; border-radius: 50%; background: #9a9a9a; display: block; }
-    .panel { position: absolute; left: 29px; top: 176px; width: 1385px; height: 599px; background: white; padding: 20px 36px 0; overflow: hidden; }
-    .pno { position: absolute; right: 36px; bottom: 30px; font-size: 24px; color: #111; z-index: 2; }
+    .panel { position: absolute; left: 29px; top: 132px; width: 1385px; height: 648px; background: white; padding: 20px 36px 0; overflow: hidden; }
+    .pno { position: absolute; right: 50px; bottom: 44px; font-size: 24px; color: #111; z-index: 2; }
 
     .pill { display: inline-block; background: var(--pink); border-radius: 18px; padding: 6px 22px; font-size: 38px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; }
     .lead { font-size: 24px; font-weight: 600; margin-bottom: 16px; }
@@ -77,33 +77,30 @@
 </head>
 <body>
 
-<!-- 43. 2부 표지 -->
+<!-- 표지 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습 · Gemini로 만드는 수업용 웹페이지</h1><span class="tag">LINKFORGE for Teachers</span><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1 style="font-weight:600">2026 찾아가는 학교컨설팅(함평손불중)</h1><span class="tag">LINKFORGE for Teachers</span><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel" style="display:grid;grid-template-columns:1fr 360px;gap:40px;padding-top:40px">
         <div>
-            <div class="pill">내 수업을 LINK로</div>
-            <div style="font-size:62px;font-weight:900;line-height:1.25;letter-spacing:-0.03em;margin:4px 0 22px">Gemini로 만드는<br>수업용 웹페이지</div>
+            <div class="pill">강의자료 3 · 내 수업을 LINK로</div>
+            <div style="font-size:62px;font-weight:900;line-height:1.25;letter-spacing:-0.03em;margin:4px 0 22px">생성형AI를 활용한<br>웹페이지 만들기</div>
             <p class="lead" style="font-size:28px">코딩 몰라도 OK — 오늘 <span class="red">학생에게 보낼 링크 1개</span>를 만들어 갑니다.</p>
             <div class="row" style="margin-top:26px"><b>순서</b> <span>아이디어 → 부탁문 → Canvas → 고치기 → 링크·QR 공유</span></div>
-            <div class="row"><b>준비</b> <span>노트북(크롬) · 광주아이온 계정(Gemini Pro) · 휴대폰 · 다음 주 수업 단원 1개</span></div>
+            <div class="row"><b>준비</b> <span>노트북(크롬) · Google 계정(Gemini) · 휴대폰 · 다음 주 수업 단원 1개</span></div>
+            <p style="font-size:30px;font-weight:800;margin-top:30px">조대부중 김효진</p>
         </div>
         <div style="text-align:center;padding-top:10px">
             <div class="qr">{{QR_SITE}}</div>
             <p style="font-size:20px;font-weight:700;margin-top:12px">📱 실습용 웹페이지</p>
-            <div class="short">부고<span>.짱.com</span></div>
+            <div class="short">손불<span>.짱.com</span></div>
         </div>
     </div>
-    <div class="pno">43/51페이지</div>
+    <div class="pno">1/9페이지</div>
 </section>
 
-<!-- 44. 오늘 할 일 -->
+<!-- 오늘 할 일 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습-오늘 할 일</h1><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1>오늘 할 일</h1><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel">
         <div class="pill">다섯 단계면 끝</div>
         <p class="lead">AI에게 부탁 → 미리보기 → <span class="red">말로 고치기</span> → 링크로 공유. 코드는 읽지 않아도 됩니다.</p>
@@ -122,14 +119,12 @@
             <tr><td><b>접근</b></td><td>교실 안에서만</td><td>QR·링크 하나로 수업 중에도, 집에서도</td></tr>
         </table>
     </div>
-    <div class="pno">44/51페이지</div>
+    <div class="pno">2/9페이지</div>
 </section>
 
-<!-- 45. 아이디어 22가지 -->
+<!-- 아이디어 22가지 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습-무엇을 만들까?</h1><span class="tag">실습 웹페이지 2번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1>무엇을 만들까?</h1><span class="tag">실습 웹페이지 2번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel">
         <div class="pill">수업용 웹페이지 22가지</div>
         <p class="lead">분류별로 골라 <span class="red">[이걸로 만들기]</span>를 누르면 기능이 자동으로 채워집니다.</p>
@@ -142,14 +137,12 @@
         </div>
         <div style="margin-top:22px"><span class="hl">👍 처음이라면 내용이 분명한 퀴즈나 개념 카드부터! 카드를 누르면 예시 화면이 떠요.</span></div>
     </div>
-    <div class="pno">45/51페이지</div>
+    <div class="pno">3/9페이지</div>
 </section>
 
-<!-- 46. 부탁문 만들기 -->
+<!-- 부탁문 만들기 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습-부탁문(프롬프트) 만들기</h1><span class="tag">실습 웹페이지 3번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1>부탁문(프롬프트) 만들기</h1><span class="tag">실습 웹페이지 3번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel">
         <div class="pill">입력하고, 첨부하고, 설계 맡기기</div>
         <div class="grid" style="grid-template-columns:repeat(3,1fr)">
@@ -166,21 +159,19 @@
         </div>
     </div>
     <div class="note"><span class="ok">✓</span>한글(HWP)도 OK — 교과서·학습지 내용이 그대로 반영돼요. <span class="red">학생 개인정보 파일은 첨부 금지!</span></div>
-    <div class="pno">46/51페이지</div>
+    <div class="pno">4/9페이지</div>
 </section>
 
-<!-- 47. Canvas -->
+<!-- Canvas -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습-Gemini Canvas로 화면 만들기</h1><span class="tag">실습 웹페이지 4번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1>Gemini Canvas로 화면 만들기</h1><span class="tag">실습 웹페이지 4번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel">
         <div class="pill">코드는 읽지 않아도 돼요</div>
         <div class="grid" style="grid-template-columns:1.1fr 1fr">
             <div class="card">
                 <div class="t">🎨 만드는 순서</div>
                 <ol class="st">
-                    <li>gemini.google.com 로그인 (광주아이온 계정)</li>
+                    <li>gemini.google.com 로그인 (Google 계정)</li>
                     <li>입력창 아래 <b>도구 → Canvas</b> 켜기</li>
                     <li>3번 탭에서 받은 프롬프트 붙여 넣고 보내기</li>
                     <li>코드가 다 써지면 <b class="red">미리보기</b> 클릭</li>
@@ -196,14 +187,12 @@
         </div>
     </div>
     <div class="note"><span class="ok">✓</span>Canvas 버튼이 안 보이면 부탁문 앞에 "Canvas에서"라고 쓰거나, 옆 선생님과 함께 진행하세요.</div>
-    <div class="pno">47/51페이지</div>
+    <div class="pno">5/9페이지</div>
 </section>
 
-<!-- 48. 고치기 -->
+<!-- 고치기 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습-말로 고치기</h1><span class="tag">고치기 부탁문 46개</span><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1>말로 고치기</h1><span class="tag">고치기 부탁문 46개</span><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel">
         <div class="pill">누르면 복사되는 고치기 부탁문</div>
         <p class="lead">실습 웹페이지 4번 탭에서 분류별로 골라 누르세요. 찾기 칸에 <span class="red">"타이머"</span>처럼 검색해도 돼요.</p>
@@ -217,14 +206,12 @@
         </div>
     </div>
     <div class="note"><span class="ok">✓</span>나만의 고치기 공식: <span class="red">[어디를] + [어떻게] + [왜]</span> — 하나 고치고 → 미리보기 확인을 반복하세요.</div>
-    <div class="pno">48/51페이지</div>
+    <div class="pno">6/9페이지</div>
 </section>
 
-<!-- 49. 공유 -->
+<!-- 공유 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습-링크·QR로 학생에게 공유하기</h1><span class="tag">실습 웹페이지 5·6번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1>링크·QR로 학생에게 공유하기</h1><span class="tag">실습 웹페이지 5·6번 탭</span><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel">
         <div class="pill">옆 선생님 휴대폰으로 찍어 보기</div>
         <div class="grid" style="grid-template-columns:1fr 1fr;gap:26px">
@@ -246,16 +233,14 @@
                 </table>
             </div>
         </div>
-        <div style="margin-top:16px"><span class="hl">🏆 조대부고 예시 퀴즈로 대결해 보기: ⚔️ 팀 대전(교실 TV 한 화면) · 실시간 대결(방 코드 QR로 각자 휴대폰)</span></div>
+        <div style="margin-top:16px"><span class="hl">🏆 함평손불중 예시 퀴즈로 대결해 보기: ⚔️ 팀 대전(교실 TV 한 화면) · 실시간 대결(방 코드 QR로 각자 휴대폰)</span></div>
     </div>
-    <div class="pno">49/51페이지</div>
+    <div class="pno">7/9페이지</div>
 </section>
 
-<!-- 50. 체크리스트 -->
+<!-- 체크리스트 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1>2부 실습-학생에게 주기 전 체크</h1><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
+    <div class="bar"><div class="lens"></div><h1>학생에게 주기 전 체크</h1><div class="dots"><i></i><i></i><i></i></div></div>
     <div class="panel">
         <div class="pill">공유 전 체크, 그리고 기억할 세 가지</div>
         <div class="grid" style="grid-template-columns:1fr 1.1fr;gap:26px">
@@ -280,19 +265,18 @@
             </div>
         </div>
     </div>
-    <div class="pno">50/51페이지</div>
+    <div class="pno">8/9페이지</div>
 </section>
 
-<!-- 51. 감사합니다 -->
+<!-- 감사합니다 -->
 <section class="slide">
-    <div class="win"><div class="o"></div><div class="x"></div></div>
-    <div class="bar"><div class="lens"></div><h1 style="font-weight:600">2026년도 AI 디지털 기반 교육혁신 거점학교_조대부고(11월)</h1><div class="dots"><i></i><i></i><i></i></div></div>
-    <img class="sticker" src="{{STICKER}}" alt="">
-    <div class="panel" style="display:flex;align-items:center;justify-content:center;gap:60px">
-        <div style="font-size:80px;font-weight:900;letter-spacing:-0.03em">감사합니다!</div>
-        <img src="{{ROBOT}}" alt="" style="width:200px;height:195px">
+    <div class="bar"><div class="lens"></div><h1 style="font-weight:600">2026 찾아가는 학교컨설팅(함평손불중)</h1><div class="dots"><i></i><i></i><i></i></div></div>
+    <div class="panel" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center">
+        <div style="font-size:88px;font-weight:900;letter-spacing:-0.03em">감사합니다!</div>
+        <p style="font-size:30px;font-weight:700;color:var(--muted)">오늘 만든 링크 1개가 <span class="red">다음 주 수업</span>이 됩니다 🌱</p>
+        <div style="display:flex;align-items:center;gap:22px;margin-top:10px"><div class="qr" style="padding:8px">{{QR_SMALL}}</div><div class="short">손불<span>.짱.com</span></div></div>
     </div>
-    <div class="pno">51/51페이지</div>
+    <div class="pno">9/9페이지</div>
 </section>
 
 </body>
