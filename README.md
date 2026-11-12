@@ -9,7 +9,7 @@
 - 예시 퀴즈: `examples/sonbul-quiz.html` (함평손불중학교 학교소개 기반)
 - 예시 퀴즈 2: `examples/ai-quiz.html` (인공지능 기초)
 - 강의자료 1: `materials/1_school_change_review.pdf` — 우리 학교 변화 돌아보기-함평손불중학교
-- 강의자료 2: `materials/2_AI_class_practice.pdf` — 교과별 AI수업실천과정(생성형AI,캔바)_함평손불중 (마무리 인사 `ai_class_closing.html` 덧붙임)
+- 강의자료 2: `materials/2_AI_class_practice.pdf` — 교과별 AI수업실천과정(생성형AI,캔바)_함평손불중 (마무리 인사 포함)
 - 강의자료 3: `materials/3_webpage_making.pdf` — 생성형AI를 활용한 웹페이지 만들기 (`webpage_slides.html`)
 - 강의자료 다시 만들기: `python materials/build_materials.py <강의자료1 PDF> <강의자료2 원본 PDF>`
 - 원본: [richee-pc/26AI_design](https://github.com/richee-pc/26AI_design) · 조대부고 버전 [math94hj-coder/26bugo](https://github.com/math94hj-coder/26bugo)

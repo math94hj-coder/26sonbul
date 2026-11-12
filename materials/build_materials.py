@@ -1,7 +1,7 @@
 """함평손불중 연수 강의자료 3가지 PDF를 만든다.
 
 - 강의자료 1 = 1_school_change_review.pdf : '우리 학교 변화 돌아보기-함평손불중학교' (받은 PDF 그대로)
-- 강의자료 2 = 2_AI_class_practice.pdf    : '교과별 AI수업실천과정(생성형AI,캔바)_함평손불중' + 마무리 인사(ai_class_closing.html)
+- 강의자료 2 = 2_AI_class_practice.pdf    : '교과별 AI수업실천과정(생성형AI,캔바)_함평손불중' (받은 PDF 그대로, 마무리 인사 포함)
 - 강의자료 3 = 3_webpage_making.pdf       : '생성형AI를 활용한 웹페이지 만들기' (webpage_slides.html)
 
 사용법: python build_materials.py <강의자료1 PDF> <강의자료2 PDF>
@@ -63,17 +63,8 @@ def main():
     # 강의자료 1: 그대로
     shutil.copyfile(src1, HERE / "1_school_change_review.pdf")
 
-    # 강의자료 2: 원본 + 마무리 인사
-    pdf_from_html((HERE / "ai_class_closing.html").read_text(encoding="utf-8"), HERE / ".closing.pdf")
-    orig = PdfReader(src2)
-    W = float(orig.pages[0].mediabox.width)
-    w = PdfWriter(clone_from=orig)
-    for pg in PdfReader(HERE / ".closing.pdf").pages:
-        add_scaled(w, pg, W)
-    with open(HERE / "2_AI_class_practice.pdf", "wb") as f:
-        w.write(f)
-    (HERE / ".closing.pdf").unlink()
-    print("강의자료 2:", len(w.pages), "쪽")
+    # 강의자료 2: 그대로
+    shutil.copyfile(src2, HERE / "2_AI_class_practice.pdf")
 
     # 강의자료 3: 웹페이지 만들기 슬라이드
     s = (HERE / "webpage_slides.html").read_text(encoding="utf-8")
